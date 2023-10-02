@@ -118,6 +118,49 @@ if (!axe.isHeld && !player.isHoldingAxe) {
         }
     }
 }
+const buildings = [];
+
+function generateRandomBuildings(count) {
+    for (let i = 0; i < count; i++) {
+        const building = {
+            x: Math.random() * gameWorld.width,
+            y: Math.random() * gameWorld.height,
+            width: 100, // Adjust the width of the building
+            height: 100, // Adjust the height of the building
+            color: '#8B0000', // Adjust the color of the building
+        };
+
+        let collision = false;
+        for (const existingBuilding of buildings) {
+            const dx = building.x - existingBuilding.x;
+            const dy = building.y - existingBuilding.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < building.width + 20) { // Adjust the spacing between buildings
+                collision = true;
+                break;
+            }
+        }
+
+        if (!collision) {
+            buildings.push(building);
+        }
+    }
+}
+generateRandomBuildings(60);
+function drawBuildings() {
+    ctx.fillStyle = building.color;
+    for (const building of buildings) {
+        ctx.fillRect(building.x - camera.x, building.y - camera.y, building.width, building.height);
+    }
+}
+function markBuildingsOnMap() {
+    mapCtx.fillStyle = 'orange'; // Adjust the color for marking buildings on the map
+    for (const building of buildings) {
+        const buildingMapX = (building.x / gameWorld.width) * mapCanvasWidth;
+        const buildingMapY = (building.y / gameWorld.height) * mapCanvasHeight;
+        mapCtx.fillRect(buildingMapX - 2, buildingMapY - 2, 4, 4); // Adjust the marker size
+    }
+}
         let isSearching = true;
         const searchHistory = [];
         const searchDuration = 20000;
@@ -362,7 +405,7 @@ function playerHit() {
                 monster.isChasing = false;
                 toggleMusic(false);
             }
-
+            drawBuildings();
             if (isSearching) {
                 searchForPlayer();
             } else {
@@ -572,7 +615,7 @@ function playerHit() {
             mapCtx.beginPath();
             mapCtx.arc(monsterMapX, monsterMapY, 1, 0, Math.PI * 2);
             mapCtx.fill();
-
+            markBuildingsOnMap();
             trees.forEach((tree) => {
                 const treeMapX = (tree.x / gameWorld.width) * mapCanvasWidth;
                 const treeMapY = (tree.y / gameWorld.height) * mapCanvasHeight;
