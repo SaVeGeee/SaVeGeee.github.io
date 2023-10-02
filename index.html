@@ -153,7 +153,7 @@ function generateRandomBuildings(count) {
 }
 generateRandomBuildings(60);
 function drawBuildings() {
-    ctx.fillStyle = building.color;
+    ctx.fillStyle = '#8B0000'; // Adjust the color for buildings
     for (const building of buildings) {
         ctx.fillRect(building.x - camera.x, building.y - camera.y, building.width, building.height);
     }
