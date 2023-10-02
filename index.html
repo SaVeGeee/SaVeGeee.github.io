@@ -119,7 +119,12 @@ if (!axe.isHeld && !player.isHoldingAxe) {
     }
 }
 const buildings = [];
-
+function drawBuildings() {
+    ctx.fillStyle = '#8B0000'; // Adjust the color for buildings
+    for (const building of buildings) {
+        ctx.fillRect(building.x - camera.x, building.y - camera.y, building.width, building.height);
+    }
+}
 function generateRandomBuildings(count) {
     for (let i = 0; i < count; i++) {
         const building = {
