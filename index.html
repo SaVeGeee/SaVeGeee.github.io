@@ -19,7 +19,19 @@
             border: 1px solid #ccc;
             display: none;
         }
+        /* Style for buildings (houses) */
+        .building {
+            background-color: #8B0000;
+            position: absolute;
+        }
 
+        /* Style for building entrances */
+        .entrance {
+            background-color: #ffffff;
+            position: absolute;
+            width: 20px;
+            height: 10px;
+        }
         #mapCanvas {
             width: 100%;
             height: 100%;
@@ -118,46 +130,55 @@ if (!axe.isHeld && !player.isHoldingAxe) {
         }
     }
 }
-const buildings = [];
-function drawBuildings() {
-    ctx.fillStyle = '#8B0000'; // Adjust the color for buildings
-    for (const building of buildings) {
-        ctx.fillRect(building.x - camera.x, building.y - camera.y, building.width, building.height);
-    }
-}
-function generateRandomBuildings(count) {
-    for (let i = 0; i < count; i++) {
-        const building = {
-            x: Math.random() * gameWorld.width,
-            y: Math.random() * gameWorld.height,
-            width: 100, // Adjust the width of the building
-            height: 100, // Adjust the height of the building
-            color: '#8B0000', // Adjust the color of the building
-        };
+       const buildings = [];
+        generateRandomBuildings(10); // Adjust the number of buildings as needed
 
-        let collision = false;
-        for (const existingBuilding of buildings) {
-            const dx = building.x - existingBuilding.x;
-            const dy = building.y - existingBuilding.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance < building.width + 20) { // Adjust the spacing between buildings
-                collision = true;
-                break;
+        // Function to generate random buildings (houses)
+        function generateRandomBuildings(count) {
+            for (let i = 0; i < count; i++) {
+                const building = {
+                    x: Math.random() * gameWorld.width,
+                    y: Math.random() * gameWorld.height,
+                    width: 100, // Adjust the dimensions of the building
+                    height: 100, // Adjust the dimensions of the building
+                    entranceX: 0, // X-coordinate of the entrance
+                    entranceY: 0, // Y-coordinate of the entrance
+                };
+
+                building.entranceX = building.x + building.width / 2 - 10; // Adjust the entrance position
+                building.entranceY = building.y + building.height - 10; // Adjust the entrance position
+
+                buildings.push(building);
             }
         }
 
-        if (!collision) {
-            buildings.push(building);
+        // Function to draw buildings (houses)
+        function drawBuildings() {
+            for (const building of buildings) {
+                // Draw the building (house)
+                const buildingElement = document.createElement('div');
+                buildingElement.classList.add('building');
+                buildingElement.style.left = `${building.x}px`;
+                buildingElement.style.top = `${building.y}px`;
+                buildingElement.style.width = `${building.width}px`;
+                buildingElement.style.height = `${building.height}px`;
+                document.body.appendChild(buildingElement);
+
+                // Draw the entrance
+                const entranceElement = document.createElement('div');
+                entranceElement.classList.add('entrance');
+                entranceElement.style.left = `${building.entranceX}px`;
+                entranceElement.style.top = `${building.entranceY}px`;
+                document.body.appendChild(entranceElement);
+            }
         }
-    }
-}
+
 generateRandomBuildings(60);
 function drawBuildings() {
     ctx.fillStyle = '#8B0000'; // Adjust the color for buildings
     for (const building of buildings) {
         ctx.fillRect(building.x - camera.x, building.y - camera.y, building.width, building.height);
     }
-}
 function markBuildingsOnMap() {
     mapCtx.fillStyle = 'orange'; // Adjust the color for marking buildings on the map
     for (const building of buildings) {
