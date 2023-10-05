@@ -112,7 +112,7 @@ if (!axe.isHeld && !player.isHoldingAxe) {
     const distanceToAxe = Math.sqrt(dxAxe * dxAxe + dyAxe * dyAxe);
 
     if (distanceToAxe < interactionDistance) {
-        if (keys.e) { // Change to the desired interaction key (e.g., 'E')
+        if (keys.e) {
             axe.isHeld = true;
             player.isHoldingAxe = true;
         }
@@ -278,32 +278,27 @@ if (!axe.isHeld && !player.isHoldingAxe) {
                 mapContainer.style.display = isMapVisible ? 'block' : 'none';
             }
         });
-let isHitting = false; // Flag to track if the player is currently hitting
-let lastHitTime = 0;   // Timestamp of the last hit
+let isHitting = false;
+let lastHitTime = 0; 
 
-// Add an event listener for the left mouse button click
 canvas.addEventListener('mousedown', (e) => {
-    if (e.button === 0 && !isHitting) { // Check if the left mouse button is clicked and not hitting
+    if (e.button === 0 && !isHitting) { 
         playerHit();
     }
 });
 
 function playerHit() {
-    // Check if the cooldown period has passed (2 seconds)
     const currentTime = Date.now();
     if (currentTime - lastHitTime >= 2000) {
-        // Set the player as hitting and record the hit time
         isHitting = true;
         lastHitTime = currentTime;
 
-        // Play the hit animation (change player's appearance)
-        player.color = 'red'; // For example, change the player's color to red
+        player.color = 'red';
 
-        // After a short duration, revert the player's appearance and reset the hit flag
         setTimeout(() => {
-            player.color = '#b4a27e'; // Revert the player's color
-            isHitting = false; // Reset the hit flag
-        }, 500); // Adjust the duration of the hit animation as needed
+            player.color = '#b4a27e'; 
+            isHitting = false;
+        }, 500); 
     }
 }
         function update() {
@@ -383,8 +378,8 @@ function playerHit() {
             }
 
             const healthPercentage = player.health / player.maxHealth;
-            const redValue = 95 + (160 * (1 - healthPercentage)); // Adjust red channel
-            const greenValue = 95 * healthPercentage; // Adjust green channel
+            const redValue = 95 + (160 * (1 - healthPercentage)); 
+            const greenValue = 95 * healthPercentage;
 
             canvas.style.backgroundColor = `rgb(${redValue}, ${greenValue}, 101)`;
             canvas.style.backgroundColor = "#283c25";
@@ -476,17 +471,14 @@ function playerHit() {
             ctx.beginPath();
             ctx.arc(player.x - camera.x, player.y - camera.y, player.radius, 0, Math.PI * 2);
             ctx.fill();
-            // Draw the axe with the calculated rotation
-            ctx.save(); // Save the current context state
-            ctx.translate(player.x - camera.x, player.y - camera.y); // Translate to player's position
-            ctx.rotate(axe.rotation); // Rotate based on axe.rotation
-            ctx.drawImage(axeImage, -axe.width / 8, -axe.height / 5, axe.width, axe.height); // Draw the axe centered
-            ctx.restore(); // Restore the context state          
+            ctx.save(); 
+            ctx.translate(player.x - camera.x, player.y - camera.y);
+            ctx.rotate(axe.rotation);
+            ctx.drawImage(axeImage, -axe.width / 8, -axe.height / 5, axe.width, axe.height);
+            ctx.restore(); 
             ctx.fillStyle = '#ffffff';
-// Inside the `update` function, before drawing the player character
-// Calculate shading based on the player's position relative to the light source
-const lightSourceX = monster.x - camera.x; // Adjust for the camera position
-const lightSourceY = monster.y - camera.y; // Adjust for the camera position
+const lightSourceX = monster.x - camera.x;
+const lightSourceY = monster.y - camera.y;
 
 const dxPlayerToLight = player.x - lightSourceX;
 const dyPlayerToLight = player.y - lightSourceY;
