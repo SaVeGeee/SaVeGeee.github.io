@@ -483,6 +483,41 @@ function playerHit() {
             ctx.drawImage(axeImage, -axe.width / 8, -axe.height / 5, axe.width, axe.height); // Draw the axe centered
             ctx.restore(); // Restore the context state          
             ctx.fillStyle = '#ffffff';
+// Inside the `update` function, before drawing the player character
+// Calculate shading based on the player's position relative to the light source
+const lightSourceX = monster.x - camera.x; // Adjust for the camera position
+const lightSourceY = monster.y - camera.y; // Adjust for the camera position
+
+const dxPlayerToLight = player.x - lightSourceX;
+const dyPlayerToLight = player.y - lightSourceY;
+const distanceToLight = Math.sqrt(dxPlayerToLight * dxPlayerToLight + dyPlayerToLight * dyPlayerToLight);
+
+// Adjust shading based on the distance to the light source (you can adjust these values)
+const shadingFactor = Math.min(1, 5000 / distanceToLight); // Increase the denominator for a larger lighting radius
+
+// Calculate the shading color based on the shading factor
+const shadingColor = `rgba(0, 0, 0, ${1 - shadingFactor})`;
+
+// Apply the shading color to the player character
+ctx.fillStyle = shadingColor;
+ctx.beginPath();
+ctx.arc(player.x - camera.x, player.y - camera.y, player.radius, 0, Math.PI * 2);
+ctx.fill();
+ctx.fillStyle = player.color; // Restore the player's original color
+// Inside the `update` function, after shading
+// Calculate lighting based on the player's position relative to the light source
+
+// Adjust lighting based on the distance to the light source (you can adjust these values)
+const lightingFactor = Math.min(1, 5000 / distanceToLight); // Increase the denominator for a larger lighting radius
+
+// Calculate the lighting color based on the lighting factor
+const lightingColor = `rgba(255, 255, 255, ${lightingFactor})`;
+
+// Apply the lighting color to the player character
+ctx.fillStyle = lightingColor;
+ctx.beginPath();
+ctx.arc(player.x - camera.x, player.y - camera.y, player.radius, 0, Math.PI * 2);
+ctx.fill();
             const eyeRadius = player.radius / 5;
             const eyeOffsetX = player.radius / 2;
             const eyeOffsetY = player.radius / 4;
